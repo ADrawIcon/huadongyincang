@@ -44,6 +44,24 @@
     //_tv1.hidden = YES;
    
     [self.view bringSubviewToFront:imgView];
+    
+    imgView.userInteractionEnabled = YES;
+    //创建拖拽手势
+    UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self
+                                                                        action:@selector(handlePanGestures:)];
+    //无论最大还是最小都只允许一个手指
+    panGestureRecognizer.minimumNumberOfTouches = 1;
+    panGestureRecognizer.maximumNumberOfTouches = 1;
+    [imgView addGestureRecognizer:panGestureRecognizer];
+}
+
+
+- (void) handlePanGestures:(UIPanGestureRecognizer*)paramSender{
+    if (paramSender.state != UIGestureRecognizerStateEnded && paramSender.state != UIGestureRecognizerStateFailed){
+        //通过使用 locationInView 这个方法,来获取到手势的坐标
+        CGPoint location = [paramSender locationInView:paramSender.view.superview];
+        paramSender.view.center = location;
+    }
 }
 
 - (void)didReceiveMemoryWarning {
